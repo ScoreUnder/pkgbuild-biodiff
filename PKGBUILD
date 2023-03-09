@@ -1,29 +1,23 @@
 # Maintainer: Daniel Maslowski <info@orangecms.org>
 
 pkgname=biodiff
-pkgver=0.2.1
+pkgver=1.1.0
 pkgrel=1
 pkgdesc="Hex diff viewer using alignment algorithms from biology"
 arch=('x86_64')
 url="https://github.com/8051Enthusiast/biodiff"
 license=('MIT')
-makedepends=(cargo-nightly)
+makedepends=(cargo)
 source=("$pkgname-$pkgver.tar.gz::https://static.crates.io/crates/$pkgname/$pkgname-$pkgver.crate")
-sha512sums=('3465622163689a92fb054d8f5858d5c5e4b80d0eb25810e28403f8c0cdf6f169a9fb28853793233d3460cd5ad1dfc40819f0110ac882f5bc0a8899ce7aff0f93')
-
-prepare() {
-    cd "$pkgname-$pkgver"
-    cargo +nightly fetch --locked --target "$CARCH-unknown-linux-gnu"
-}
+sha512sums=('1f277c9829a02d734a99c5e5568c38ddee600ef480a06d2b0dc6467a1b040759c0f21a1b533715caf52ec293ea9c1b6506ade8d3fe518f9f2fcc3651aba8a891')
 
 build() {
-    cd "$pkgname-$pkgver"
-    export RUSTUP_TOOLCHAIN=nightly
+    cd "$srcdir/$pkgname-$pkgver"
     export CARGO_TARGET_DIR=target
-    cargo +nightly build --frozen --release --all-features
+    cargo build --locked --release --all-features
 }
 
 package() {
-    cd "$pkgname-$pkgver"
+    cd "$srcdir/$pkgname-$pkgver"
     install -Dm0755 -t "$pkgdir/usr/bin/" "target/release/$pkgname"
 }
